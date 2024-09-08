@@ -19,12 +19,19 @@ public class QuestionController {
     @Autowired
     QuestionService questionService;
 
-    @GetMapping("/allQuestions")
+    @GetMapping(path = "/allQuestions")
     public ResponseEntity<List<Question>> getAllQuestions() {
-        return questionService.getAllQuestions();
+        try {
+            return questionService.getAllQuestions();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            return new ResponseEntity<>(new ArrayList<>(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
-    @GetMapping("/category/{category}")
+    @GetMapping(path = "/category/{category}")
     public ResponseEntity<List<Question>> getQuestionsByCategory(@PathVariable String category) {
         try {
             return questionService.getQuestionsByCategory(category);
@@ -34,7 +41,7 @@ public class QuestionController {
         }
     }
 
-    @PostMapping("/add")
+    @PostMapping(path = "/add")
     public ResponseEntity<String> addQuestions(@RequestBody Question question) {
         try {
             return questionService.addQuestion(question);
@@ -45,7 +52,7 @@ public class QuestionController {
         }
     }
 
-    @GetMapping("/generate")
+    @GetMapping(path = "/generate")
     public ResponseEntity<List<Integer>> generateQuestionForQuiz(@RequestParam String categoryName, @RequestParam Integer numQuestions) {
         try {
             return questionService.getQuestionsForQuiz(categoryName, numQuestions);
@@ -55,7 +62,7 @@ public class QuestionController {
         }
     }
 
-    @PostMapping("/getQuestion")
+    @PostMapping(path = "/getQuestion")
     public ResponseEntity<List<QuestionWrapper>> getQuestionFromId(@RequestBody List<Integer> questionIds)
     {
         try
@@ -69,7 +76,7 @@ public class QuestionController {
         }
     }
 
-    @PostMapping("/getScore")
+    @PostMapping(path = "/getScore")
     public ResponseEntity<Integer> getScore(@RequestBody List<Response> responses)
     {
         try
